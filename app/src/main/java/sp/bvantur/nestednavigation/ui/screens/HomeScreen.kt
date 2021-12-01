@@ -8,13 +8,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -22,22 +21,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import com.ramcosta.composedestinations.DestinationsNavHost
+import com.ramcosta.composedestinations.NavGraphs
+import com.ramcosta.composedestinations.ProfileScreenDestination
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.rememberDestinationsNavController
 import kotlinx.coroutines.launch
+import sp.bvantur.nestednavigation.MainActivity
 
+@Destination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(parentNavController: NavHostController) {
+fun HomeScreen(navigator: DestinationsNavigator) {
+	MainActivity.homeScreenNavigator = navigator
 	val scaffoldState = rememberScaffoldState()
 	val scope = rememberCoroutineScope()
-	val navController: NavHostController = rememberNavController()
-	Scaffold(
+	val navController: NavHostController = rememberDestinationsNavController()
+
+	DestinationsScaffold(
 		scaffoldState = scaffoldState,
+		navController = navController,
 		drawerContent = {
 			DrawerRow("Profile", true) {
-
+				scope.launch { scaffoldState.drawerState.close() }
 			}
 		},
 		topBar = {
@@ -46,10 +53,10 @@ fun HomeScreen(parentNavController: NavHostController) {
 			}
 		},
 	) {
-		NavHost(navController = navController, startDestination = "profile") {
-			composable("profile") { ProfileScreen(parentNavController, navController) }
-			composable("internal-details") { InternalDetailsScreen() }
-		}
+		DestinationsNavHost(
+			navController = navController,
+			startDestination = ProfileScreenDestination
+		)
 	}
 }
 

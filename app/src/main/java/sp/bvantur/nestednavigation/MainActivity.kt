@@ -14,17 +14,24 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.ramcosta.composedestinations.DestinationsNavHost
+import com.ramcosta.composedestinations.NavGraphs
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.rememberDestinationsNavController
 import sp.bvantur.nestednavigation.ui.screens.ExternalDetailsScreen
 import sp.bvantur.nestednavigation.ui.screens.HomeScreen
 import sp.bvantur.nestednavigation.ui.screens.SplashScreen
 import sp.bvantur.nestednavigation.ui.theme.NestedNavigationTheme
 
 class MainActivity : ComponentActivity() {
+	companion object {
+		var homeScreenNavigator: DestinationsNavigator? = null
+	}
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContent {
 
-			val navController: NavHostController = rememberNavController()
+			val navController = rememberDestinationsNavController()
 
 			NestedNavigationTheme {
 				// A surface container using the 'background' color from the theme
@@ -32,11 +39,11 @@ class MainActivity : ComponentActivity() {
 					modifier = Modifier.fillMaxSize(),
 					color = MaterialTheme.colorScheme.background
 				) {
-					NavHost(navController = navController, startDestination = "splash") {
-						composable("splash") { SplashScreen(navController) }
-						composable("home") { HomeScreen(navController) }
-						composable("external-details") { ExternalDetailsScreen() }
-					}
+
+					DestinationsNavHost(
+						navController = navController,
+						startDestination = NavGraphs.root.startDestination
+					)
 				}
 			}
 		}

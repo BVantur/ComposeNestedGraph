@@ -13,15 +13,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.navigation.NavHostController
+import com.ramcosta.composedestinations.HomeScreenDestination
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@Destination(start = true)
 @Composable
-fun SplashScreen(parentNavController: NavHostController) {
+fun SplashScreen(navigator: DestinationsNavigator) {
 	Box(modifier = Modifier
 		.fillMaxSize()
 		.background(Color.Blue)) {
 		Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
 			Text("Splash screen", style = TextStyle(color = Color.White))
-			Button(onClick = { parentNavController.navigate("home") }) {
+			Button(onClick = {
+				navigator.navigate(HomeScreenDestination)
+			}) {
 				Text("To home screen")
 			}
 		}
