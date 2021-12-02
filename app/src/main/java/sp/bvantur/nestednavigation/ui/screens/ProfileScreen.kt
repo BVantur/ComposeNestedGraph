@@ -19,8 +19,8 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import sp.bvantur.nestednavigation.MainActivity
 
-//@Destination(navGraph = "profile", start = true)
-@Destination
+@Destination(navGraph = "profile", start = true)
+//@Destination
 @Composable
 fun ProfileScreen(navigator: DestinationsNavigator) {
 	Box(modifier = Modifier
@@ -28,8 +28,7 @@ fun ProfileScreen(navigator: DestinationsNavigator) {
 		.background(Color.Red)) {
 		Column {
 			Button(onClick = {
-				MainActivity.homeScreenNavigator?.navigate(ExternalDetailsScreenDestination)
-//				navigator.navigate(ExternalDetailsScreenDestination)
+				navigator.navigate(ExternalDetailsScreenDestination)
 			}) {
 				Text(text = "External details screen")
 			}

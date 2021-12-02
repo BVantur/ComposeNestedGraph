@@ -12,8 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.navigation.NavHostController
-import com.ramcosta.composedestinations.HomeScreenDestination
+import com.ramcosta.composedestinations.ProfileScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -26,7 +25,7 @@ fun SplashScreen(navigator: DestinationsNavigator) {
 		Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
 			Text("Splash screen", style = TextStyle(color = Color.White))
 			Button(onClick = {
-				navigator.navigate(HomeScreenDestination)
+				navigator.navigate(ProfileScreenDestination)
 			}) {
 				Text("To home screen")
 			}

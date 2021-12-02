@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.ramcosta.composedestinations.annotation.Destination
 
-@Destination(navGraph = "profile", start = true)
+@Destination(navGraph = "profile")
 @Composable
 fun InternalDetailsScreen() {
 	Box(modifier = Modifier.fillMaxSize().background(Color.Red))
