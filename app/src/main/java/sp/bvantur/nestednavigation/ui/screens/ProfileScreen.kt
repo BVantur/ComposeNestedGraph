@@ -12,22 +12,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
+import com.ramcosta.composedestinations.ExternalDetailsScreenDestination
+import com.ramcosta.composedestinations.InternalDetailsScreenDestination
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@Destination
 @Composable
-fun ProfileScreen(parentNavController: NavHostController, navController: NavHostController) {
+fun ProfileScreen(
+	parentNavigator: DestinationsNavigator,
+	destinationsNavigator: DestinationsNavigator
+) {
 	Box(modifier = Modifier
 		.fillMaxSize()
-		.background(Color.Blue)) {
+		.background(Color.Red)) {
 		Column {
 			Button(onClick = {
-				parentNavController.navigate("external-details")
+				parentNavigator.navigate(ExternalDetailsScreenDestination)
 			}) {
 				Text(text = "External details screen")
 			}
 			Spacer(Modifier.height(8.dp))
 			Button(onClick = {
-				navController.navigate("internal-details")
+				destinationsNavigator.navigate(InternalDetailsScreenDestination)
 			}) {
 				Text(text = "Inside details screen")
 			}
