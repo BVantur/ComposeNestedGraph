@@ -4,6 +4,7 @@ import androidx.navigation.NavBackStackEntry
 import com.ramcosta.composedestinations.Destination
 import com.ramcosta.composedestinations.ExternalDetailsScreenDestination
 import com.ramcosta.composedestinations.HomeScreenDestination
+import com.ramcosta.composedestinations.InternalDetailsScreen2Destination
 import com.ramcosta.composedestinations.InternalDetailsScreenDestination
 import com.ramcosta.composedestinations.NavGraph
 import com.ramcosta.composedestinations.ProfileScreenDestination
@@ -27,7 +28,8 @@ object NavGraphs {
         startDestination = ProfileScreenDestination,
         destinations = listOf(
             ProfileScreenDestination,
-            InternalDetailsScreenDestination
+            InternalDetailsScreenDestination,
+            InternalDetailsScreen2Destination
         )
     )
 }

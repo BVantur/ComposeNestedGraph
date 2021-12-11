@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.ExternalDetailsScreenDestination
+import com.ramcosta.composedestinations.InternalDetailsScreen2Destination
 import com.ramcosta.composedestinations.InternalDetailsScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -23,9 +24,11 @@ fun ProfileScreen(
 	parentNavigator: DestinationsNavigator,
 	destinationsNavigator: DestinationsNavigator
 ) {
-	Box(modifier = Modifier
-		.fillMaxSize()
-		.background(Color.Red)) {
+	Box(
+		modifier = Modifier
+			.fillMaxSize()
+			.background(Color.Red)
+	) {
 		Column {
 			Button(onClick = {
 				parentNavigator.navigate(ExternalDetailsScreenDestination)
@@ -37,6 +40,12 @@ fun ProfileScreen(
 				destinationsNavigator.navigate(InternalDetailsScreenDestination)
 			}) {
 				Text(text = "Inside details screen")
+			}
+			Spacer(Modifier.height(8.dp))
+			Button(onClick = {
+				destinationsNavigator.navigate(InternalDetailsScreen2Destination.invoke(false))
+			}) {
+				Text(text = "Inside details screen2")
 			}
 		}
 	}
