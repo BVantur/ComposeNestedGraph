@@ -31,46 +31,45 @@ import com.ramcosta.composedestinations.InternalDetailsScreenDestination
 import com.ramcosta.composedestinations.ProfileScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.composable
-import com.ramcosta.composedestinations.navDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavController
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.navigateTo
 import kotlinx.coroutines.launch
 import sp.bvantur.nestednavigation.ui.NavGraphs
+import sp.bvantur.nestednavigation.ui.homeDestination
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
-fun HomeScreen(parentDestinationsNavigator: DestinationsNavigator) {
+// RAAMCOSTA: DestinationsNavigator is meant for navigation "from" a specific screen, in this cases
+// we can use NavHostController directly. Maybe I'll improve this next version
+fun HomeScreen(parentNavController: NavHostController) {
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
     val navController: NavHostController = rememberNavController()
 
-    lateinit var childNavigator: DestinationsNavController
-
     val currentBackStackEntryAsState by navController.currentBackStackEntryAsState()
     val destination =
-        currentBackStackEntryAsState?.navDestination(NavGraphs.home) ?: NavGraphs.home.startDestination
+        currentBackStackEntryAsState?.homeDestination ?: NavGraphs.home.startDestination
 
 
     Scaffold(
         scaffoldState = scaffoldState,
         drawerContent = {
             DrawerRow("Profile", destination == ProfileScreenDestination) {
-                childNavigator.navigate(ProfileScreenDestination)
-                // TODO 1# currently navigation works only for the first time, afterwards it works only if we set onlyIfResumed property to false
-//				childNavigator1.navigate(ProfileScreenDestination, false)
+                navController.navigateTo(ProfileScreenDestination(argument = "from drawer"))
                 scope.launch { scaffoldState.drawerState.close() }
             }
             DrawerRow("Internal details 1", destination == InternalDetailsScreenDestination) {
-                childNavigator.navigate(InternalDetailsScreenDestination)
-                // TODO 1# currently navigation works only for the first time, afterwards it works only if we set onlyIfResumed property to false
-//				childNavigator1.navigate(InternalDetailsScreenDestination, false)
+                // RAAMCOSTA -> you can use both normal navigate method and add ".route" to the destination
+                // or you can use navigateTo extension function
+                // navigateTo is safer because it won't let you use a route that is not resolved, i.e
+                // if the destination has navigation arguments, then to get a Routed object, you need to invoke
+                // it passing the arguments.
+                navController.navigateTo(InternalDetailsScreenDestination)
                 scope.launch { scaffoldState.drawerState.close() }
             }
             DrawerRow("Internal details 2", destination == InternalDetailsScreen2Destination) {
-                childNavigator.navigate(InternalDetailsScreen2Destination.invoke(true))
-                // TODO 1# currently navigation works only for the first time, afterwards it works only if we set onlyIfResumed property to false
-//				childNavigator1.navigate(InternalDetailsScreen2Destination, false)
+                navController.navigateTo(InternalDetailsScreen2Destination(someArg = true))
                 scope.launch { scaffoldState.drawerState.close() }
             }
         },
@@ -82,17 +81,19 @@ fun HomeScreen(parentDestinationsNavigator: DestinationsNavigator) {
     ) {
         DestinationsNavHost(
             navGraph = NavGraphs.home,
-            navController = navController
+            navController = navController,
         ) {
             // TODO 2# how can we add argument to ProfileScreenDestination?
-            composable(ProfileScreenDestination) {
-                childNavigator = DestinationsNavController(navController, it)
+            // RAAMCOSTA: you mean a navigation argument? like this: (check also the composable)
+            composable(ProfileScreenDestination) { args, entry ->
                 ProfileScreen(
-                    parentNavigator = parentDestinationsNavigator,
-                    destinationsNavigator = childNavigator
+                    argument = args.argument,
+                    parentNavigator = parentNavController,
+                    destinationsNavigator = DestinationsNavController(navController, entry)
                 )
             }
             // TODO 1# is expected to add subscreens for each composable that needs to be shown in this NavHost
+            // RAAMCOSTA: I'm not sure what you mean, but hopefully, my changes helped you here also?
 //			composable(InternalDetailsScreenDestination) {
 //				childNavigator1 = DestinationsNavController(navController, it)
 //				InternalDetailsScreen(
